@@ -1,4 +1,4 @@
-module github.com/muka/go-bluetooth/_examples
+module github.com/slicktronix/go-bluetooth/_examples
 
 go 1.14
 

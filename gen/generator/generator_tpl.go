@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/muka/go-bluetooth/gen/types"
+	"github.com/slicktronix/go-bluetooth/gen/types"
 )
 
 func RootTemplate(filename string, api *types.ApiGroup) error {

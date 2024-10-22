@@ -1,4 +1,4 @@
-//shows how to watch for new devices and list them
+// shows how to watch for new devices and list them
 package discovery_example
 
 import (
@@ -6,11 +6,11 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/muka/go-bluetooth/api"
-	"github.com/muka/go-bluetooth/api/beacon"
-	"github.com/muka/go-bluetooth/bluez/profile/adapter"
-	"github.com/muka/go-bluetooth/bluez/profile/device"
 	log "github.com/sirupsen/logrus"
+	"github.com/slicktronix/go-bluetooth/api"
+	"github.com/slicktronix/go-bluetooth/api/beacon"
+	"github.com/slicktronix/go-bluetooth/bluez/profile/adapter"
+	"github.com/slicktronix/go-bluetooth/bluez/profile/device"
 	eddystone "github.com/suapapa/go_eddystone"
 )
 

@@ -5,8 +5,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/muka/go-bluetooth/gen/types"
 	log "github.com/sirupsen/logrus"
+	"github.com/slicktronix/go-bluetooth/gen/types"
 )
 
 const propBaseRegexp = `(bool|boolean|byte|string|[i|I]nt16|[U|u]int16|uint16_t|uint32|dict|object|array\{.*?) ([A-Z].+?)`

@@ -4,9 +4,9 @@ import (
 	"sync"
 
 	"github.com/godbus/dbus/v5"
-	"github.com/muka/go-bluetooth/bluez"
-	"github.com/muka/go-bluetooth/bluez/profile/device"
 	log "github.com/sirupsen/logrus"
+	"github.com/slicktronix/go-bluetooth/bluez"
+	"github.com/slicktronix/go-bluetooth/bluez/profile/device"
 )
 
 const (

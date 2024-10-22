@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/muka/go-bluetooth/bluez/profile/adapter"
 	log "github.com/sirupsen/logrus"
+	"github.com/slicktronix/go-bluetooth/bluez/profile/adapter"
 )
 
 // Discover start device discovery

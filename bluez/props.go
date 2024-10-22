@@ -4,8 +4,8 @@ import (
 	"reflect"
 
 	"github.com/godbus/dbus/v5"
-	"github.com/muka/go-bluetooth/util"
 	log "github.com/sirupsen/logrus"
+	"github.com/slicktronix/go-bluetooth/util"
 )
 
 type WatchableClient interface {

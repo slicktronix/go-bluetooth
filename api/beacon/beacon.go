@@ -5,9 +5,9 @@ import (
 	"strings"
 
 	"github.com/godbus/dbus/v5"
-	"github.com/muka/go-bluetooth/bluez"
-	"github.com/muka/go-bluetooth/bluez/profile/advertising"
-	"github.com/muka/go-bluetooth/bluez/profile/device"
+	"github.com/slicktronix/go-bluetooth/bluez"
+	"github.com/slicktronix/go-bluetooth/bluez/profile/advertising"
+	"github.com/slicktronix/go-bluetooth/bluez/profile/device"
 )
 
 const appleBit = 0x004C

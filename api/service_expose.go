@@ -4,8 +4,8 @@ import (
 	"github.com/godbus/dbus/v5"
 	"github.com/godbus/dbus/v5/introspect"
 	"github.com/godbus/dbus/v5/prop"
-	"github.com/muka/go-bluetooth/bluez"
 	log "github.com/sirupsen/logrus"
+	"github.com/slicktronix/go-bluetooth/bluez"
 )
 
 type ExposedDBusService interface {

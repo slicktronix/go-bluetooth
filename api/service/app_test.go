@@ -3,8 +3,8 @@ package service
 import (
 	"testing"
 
-	"github.com/muka/go-bluetooth/api"
 	log "github.com/sirupsen/logrus"
+	"github.com/slicktronix/go-bluetooth/api"
 )
 
 func createTestApp(t *testing.T) *App {

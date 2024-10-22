@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	"github.com/muka/go-bluetooth/gen/types"
+	"github.com/slicktronix/go-bluetooth/gen/types"
 )
 
 type BluezAPI struct {

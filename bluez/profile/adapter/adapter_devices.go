@@ -5,12 +5,12 @@ import (
 	"strings"
 
 	"github.com/godbus/dbus/v5"
-	"github.com/muka/go-bluetooth/bluez"
-	"github.com/muka/go-bluetooth/bluez/profile/device"
-	"github.com/muka/go-bluetooth/util"
+	"github.com/slicktronix/go-bluetooth/bluez"
+	"github.com/slicktronix/go-bluetooth/bluez/profile/device"
+	"github.com/slicktronix/go-bluetooth/util"
 )
 
-//GetDeviceByAddress return a Device object based on its address
+// GetDeviceByAddress return a Device object based on its address
 func (a *Adapter1) GetDeviceByAddress(address string) (*device.Device1, error) {
 
 	list, err := a.GetDeviceList()
@@ -33,7 +33,7 @@ func (a *Adapter1) GetDeviceByAddress(address string) (*device.Device1, error) {
 	return nil, nil
 }
 
-//GetDevices returns a list of bluetooth discovered Devices
+// GetDevices returns a list of bluetooth discovered Devices
 func (a *Adapter1) GetDevices() ([]*device.Device1, error) {
 
 	list, err := a.GetDeviceList()

@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	"github.com/godbus/dbus/v5"
-	"github.com/muka/go-bluetooth/api"
-	"github.com/muka/go-bluetooth/bluez/profile/adapter"
-	"github.com/muka/go-bluetooth/bluez/profile/agent"
 	log "github.com/sirupsen/logrus"
+	"github.com/slicktronix/go-bluetooth/api"
+	"github.com/slicktronix/go-bluetooth/bluez/profile/adapter"
+	"github.com/slicktronix/go-bluetooth/bluez/profile/agent"
 )
 
 // ToDo: allow enabling "simple pairing" (sspmode set via hcitool)

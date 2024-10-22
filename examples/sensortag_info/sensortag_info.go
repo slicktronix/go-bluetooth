@@ -13,10 +13,10 @@ package sensortag_info_example
 import (
 	"fmt"
 
-	"github.com/muka/go-bluetooth/api"
-	"github.com/muka/go-bluetooth/bluez/profile/battery"
-	"github.com/muka/go-bluetooth/devices/sensortag"
 	log "github.com/sirupsen/logrus"
+	"github.com/slicktronix/go-bluetooth/api"
+	"github.com/slicktronix/go-bluetooth/bluez/profile/battery"
+	"github.com/slicktronix/go-bluetooth/devices/sensortag"
 )
 
 func Run(address, adapterID string) error {

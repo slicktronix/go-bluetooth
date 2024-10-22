@@ -2,10 +2,10 @@ package service
 
 import (
 	"github.com/godbus/dbus/v5"
-	"github.com/muka/go-bluetooth/api"
-	"github.com/muka/go-bluetooth/bluez/profile/adapter"
-	"github.com/muka/go-bluetooth/bluez/profile/advertising"
-	"github.com/muka/go-bluetooth/bluez/profile/agent"
+	"github.com/slicktronix/go-bluetooth/api"
+	"github.com/slicktronix/go-bluetooth/bluez/profile/adapter"
+	"github.com/slicktronix/go-bluetooth/bluez/profile/advertising"
+	"github.com/slicktronix/go-bluetooth/bluez/profile/agent"
 )
 
 func (app *App) AdapterID() string {

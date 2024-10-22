@@ -4,8 +4,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/muka/go-bluetooth/api/beacon"
 	log "github.com/sirupsen/logrus"
+	"github.com/slicktronix/go-bluetooth/api/beacon"
 )
 
 func Run(beaconType, eddystoneBeaconType, adapterID string) error {

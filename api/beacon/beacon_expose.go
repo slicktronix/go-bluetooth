@@ -1,8 +1,8 @@
 package beacon
 
 import (
-	"github.com/muka/go-bluetooth/api"
-	"github.com/muka/go-bluetooth/bluez/profile/advertising"
+	"github.com/slicktronix/go-bluetooth/api"
+	"github.com/slicktronix/go-bluetooth/bluez/profile/advertising"
 )
 
 // Expose the beacon

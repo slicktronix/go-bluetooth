@@ -6,9 +6,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/muka/go-bluetooth/gen/filters"
-	"github.com/muka/go-bluetooth/gen/types"
-	"github.com/muka/go-bluetooth/gen/util"
+	"github.com/slicktronix/go-bluetooth/gen/filters"
+	"github.com/slicktronix/go-bluetooth/gen/types"
+	"github.com/slicktronix/go-bluetooth/gen/util"
 
 	log "github.com/sirupsen/logrus"
 )

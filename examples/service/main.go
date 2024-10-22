@@ -3,8 +3,8 @@ package service_example
 import (
 	"os"
 
-	"github.com/muka/go-bluetooth/hw"
 	log "github.com/sirupsen/logrus"
+	"github.com/slicktronix/go-bluetooth/hw"
 )
 
 func Run(adapterID string, mode string, hwaddr string) error {

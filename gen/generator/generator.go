@@ -6,9 +6,9 @@ import (
 	"path"
 	"strings"
 
-	"github.com/muka/go-bluetooth/gen"
-	"github.com/muka/go-bluetooth/gen/util"
 	log "github.com/sirupsen/logrus"
+	"github.com/slicktronix/go-bluetooth/gen"
+	"github.com/slicktronix/go-bluetooth/gen/util"
 	"golang.org/x/tools/imports"
 )
 

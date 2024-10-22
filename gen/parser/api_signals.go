@@ -3,8 +3,8 @@ package parser
 import (
 	"regexp"
 
-	"github.com/muka/go-bluetooth/gen/types"
 	log "github.com/sirupsen/logrus"
+	"github.com/slicktronix/go-bluetooth/gen/types"
 )
 
 func (g *ApiParser) ParseSignals(raw []byte) ([]*types.Method, error) {

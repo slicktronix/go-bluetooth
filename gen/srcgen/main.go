@@ -7,11 +7,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/muka/go-bluetooth/gen"
-	"github.com/muka/go-bluetooth/gen/filters"
-	"github.com/muka/go-bluetooth/gen/generator"
-	"github.com/muka/go-bluetooth/gen/util"
 	log "github.com/sirupsen/logrus"
+	"github.com/slicktronix/go-bluetooth/gen"
+	"github.com/slicktronix/go-bluetooth/gen/filters"
+	"github.com/slicktronix/go-bluetooth/gen/generator"
+	"github.com/slicktronix/go-bluetooth/gen/util"
 )
 
 const (

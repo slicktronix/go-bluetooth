@@ -6,8 +6,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/muka/go-bluetooth/gen/types"
 	log "github.com/sirupsen/logrus"
+	"github.com/slicktronix/go-bluetooth/gen/types"
 )
 
 // NewMethodParser init a MethodParser
@@ -18,13 +18,13 @@ func NewMethodParser(debug bool) MethodParser {
 	}
 }
 
-//MethodParser wrap a parsable method
+// MethodParser wrap a parsable method
 type MethodParser struct {
 	model *types.Method
 	debug bool
 }
 
-//Parse a method text
+// Parse a method text
 func (g *MethodParser) Parse(raw []byte) (*types.Method, error) {
 
 	var err error = nil

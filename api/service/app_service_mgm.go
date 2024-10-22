@@ -5,9 +5,9 @@ import (
 	"strings"
 
 	"github.com/godbus/dbus/v5"
-	"github.com/muka/go-bluetooth/api"
-	"github.com/muka/go-bluetooth/bluez"
 	log "github.com/sirupsen/logrus"
+	"github.com/slicktronix/go-bluetooth/api"
+	"github.com/slicktronix/go-bluetooth/bluez"
 )
 
 func (app *App) GetServices() map[dbus.ObjectPath]*Service {
@@ -54,7 +54,7 @@ func (app *App) AddService(s *Service) error {
 	return nil
 }
 
-//RemoveService remove an exposed service
+// RemoveService remove an exposed service
 func (app *App) RemoveService(service *Service) error {
 	if _, ok := app.services[service.Path()]; !ok {
 		return nil

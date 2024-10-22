@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/muka/go-bluetooth/hw/linux/cmd"
+	"github.com/slicktronix/go-bluetooth/hw/linux/cmd"
 )
 
 type HcitoolDev struct {
