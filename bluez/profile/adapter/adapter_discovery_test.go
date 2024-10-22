@@ -59,3 +59,39 @@ func TestDiscovery(t *testing.T) {
 
 	wg.Wait()
 }
+
+func TestOnDiscoverDataRace(t *testing.T) {
+	a, err := GetAdapter(GetDefaultAdapterID())
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if err = a.FlushDevices(); err != nil {
+		t.Fatal(err)
+	}
+
+	err = a.StartDiscovery()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	ch, discoveryCancel, err := a.OnDeviceDiscovered()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	go func() {
+		for range ch {
+
+		}
+	}()
+
+	cancel := func() {
+		err := a.StopDiscovery()
+		if err != nil {
+			t.Fatal(err)
+		}
+		discoveryCancel()
+	}
+	defer cancel()
+}
