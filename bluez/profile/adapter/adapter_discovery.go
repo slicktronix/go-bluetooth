@@ -1,6 +1,8 @@
 package adapter
 
 import (
+	"sync"
+
 	"github.com/godbus/dbus/v5"
 	"github.com/muka/go-bluetooth/bluez"
 	"github.com/muka/go-bluetooth/bluez/profile/device"
@@ -31,7 +33,8 @@ func (a *Adapter1) OnDeviceDiscovered() (chan *DeviceDiscovered, func(), error) 
 	}
 
 	var (
-		ch = make(chan *DeviceDiscovered)
+		ch    = make(chan *DeviceDiscovered)
+		mutex sync.Mutex
 	)
 
 	go func() {
@@ -69,7 +72,9 @@ func (a *Adapter1) OnDeviceDiscovered() (chan *DeviceDiscovered, func(), error) 
 				for _, iface := range ifaces {
 					if iface == device.Device1Interface {
 						log.Tracef("Removed device %s", path)
+						mutex.Lock()
 						ch <- &DeviceDiscovered{path, op}
+						mutex.Unlock()
 					}
 				}
 				continue
@@ -82,12 +87,13 @@ func (a *Adapter1) OnDeviceDiscovered() (chan *DeviceDiscovered, func(), error) 
 				}
 				log.Tracef("Added device %s", path)
 
+				mutex.Lock()
 				if ch == nil {
 					return
 				}
 
 				ch <- &DeviceDiscovered{path, op}
-
+				mutex.Unlock()
 			}
 
 		}
@@ -95,10 +101,12 @@ func (a *Adapter1) OnDeviceDiscovered() (chan *DeviceDiscovered, func(), error) 
 
 	cancel := func() {
 		omSignalCancel()
+		mutex.Lock()
 		if ch != nil {
 			close(ch)
 		}
 		ch = nil
+		mutex.Unlock()
 		log.Trace("OnDeviceDiscovered: cancel() called")
 	}
 
