@@ -39,7 +39,6 @@ func NewElement1(servicePath string, objectPath dbus.ObjectPath) (*Element1, err
 
 /*
 Element1 Mesh Element Hierarchy
-
 */
 type Element1 struct {
 	client                 *bluez.Client
@@ -61,47 +60,26 @@ type Element1Properties struct {
 	Location uint16
 
 	/*
-		Models An array of SIG Models:
-
-				id - SIG Model Identifier
-
-				options - a dictionary that may contain additional model
-				info. The following keys are defined:
+		Models An array of SIG Model Identifiers. The array may be empty.
 	*/
-	Models []ConfigurationItem
+	Models []uint16
 
 	/*
-		Publish supports publication mechanism
-	*/
-	Publish bool
-
-	/*
-		Subscribe supports subscription mechanism
+		VendorModels An array of pairs (vendor, model ID): vendor is a 16-bit
+			Bluetooth-assigned Company ID as defined by Bluetooth SIG.
+			model ID is a 16-bit vendor-assigned Model Identifier
 
 			The array may be empty.
 	*/
-	Subscribe bool
-
-	/*
-		VendorModels An array of Vendor Models:
-
-				vendor - a 16-bit Bluetooth-assigned Company ID as
-				defined by Bluetooth SIG.
-
-				id - a 16-bit vendor-assigned Model Identifier
-
-				options - a dictionary that may contain additional model
-				info. The following keys are defined:
-	*/
-	VendorModels []VendorOptionsItem
+	VendorModels []VendorItem
 }
 
-//Lock access to properties
+// Lock access to properties
 func (p *Element1Properties) Lock() {
 	p.lock.Lock()
 }
 
-//Unlock access to properties
+// Unlock access to properties
 func (p *Element1Properties) Unlock() {
 	p.lock.Unlock()
 }
@@ -116,49 +94,21 @@ func (a *Element1) GetLocation() (uint16, error) {
 }
 
 // GetModels get Models value
-func (a *Element1) GetModels() ([]ConfigurationItem, error) {
+func (a *Element1) GetModels() ([]uint16, error) {
 	v, err := a.GetProperty("Models")
 	if err != nil {
-		return []ConfigurationItem{}, err
+		return []uint16{}, err
 	}
-	return v.Value().([]ConfigurationItem), nil
-}
-
-// SetPublish set Publish value
-func (a *Element1) SetPublish(v bool) error {
-	return a.SetProperty("Publish", v)
-}
-
-// GetPublish get Publish value
-func (a *Element1) GetPublish() (bool, error) {
-	v, err := a.GetProperty("Publish")
-	if err != nil {
-		return false, err
-	}
-	return v.Value().(bool), nil
-}
-
-// SetSubscribe set Subscribe value
-func (a *Element1) SetSubscribe(v bool) error {
-	return a.SetProperty("Subscribe", v)
-}
-
-// GetSubscribe get Subscribe value
-func (a *Element1) GetSubscribe() (bool, error) {
-	v, err := a.GetProperty("Subscribe")
-	if err != nil {
-		return false, err
-	}
-	return v.Value().(bool), nil
+	return v.Value().([]uint16), nil
 }
 
 // GetVendorModels get VendorModels value
-func (a *Element1) GetVendorModels() ([]VendorOptionsItem, error) {
+func (a *Element1) GetVendorModels() ([]VendorItem, error) {
 	v, err := a.GetProperty("VendorModels")
 	if err != nil {
-		return []VendorOptionsItem{}, err
+		return []VendorItem{}, err
 	}
-	return v.Value().([]VendorOptionsItem), nil
+	return v.Value().([]VendorItem), nil
 }
 
 // Close the connection
@@ -300,22 +250,22 @@ func (a *Element1) UnwatchProperties(ch chan *bluez.PropertyChanged) error {
 
 /*
 MessageReceived 		This method is called by bluetooth-meshd daemon when a message
-		arrives addressed to the application.
-		The source parameter is unicast address of the remote
-		node-element that sent the message.
-		The key_index parameter indicates which application key has been
-		used to decode the incoming message. The same key_index should
-		be used by the application when sending a response to this
-		message (in case a response is expected).
-		The destination parameter contains the destination address of
-		received message. Underlying variant types are:
-		uint16
-			Destination is an unicast address, or a well known
-			group address
-		array{byte}
-			Destination is a virtual address label
-		The data parameter is the incoming message.
 
+	arrives addressed to the application.
+	The source parameter is unicast address of the remote
+	node-element that sent the message.
+	The key_index parameter indicates which application key has been
+	used to decode the incoming message. The same key_index should
+	be used by the application when sending a response to this
+	message (in case a response is expected).
+	The destination parameter contains the destination address of
+	received message. Underlying variant types are:
+	uint16
+		Destination is an unicast address, or a well known
+		group address
+	array{byte}
+		Destination is a virtual address label
+	The data parameter is the incoming message.
 */
 func (a *Element1) MessageReceived(source uint16, key_index uint16, destination dbus.Variant, data []byte) error {
 	return a.client.Call("MessageReceived", 0, source, key_index, destination, data).Store()
@@ -323,19 +273,19 @@ func (a *Element1) MessageReceived(source uint16, key_index uint16, destination 
 
 /*
 DevKeyMessageReceived 		This method is called by meshd daemon when a message arrives
-		addressed to the application, which was sent with the remote
-		node's device key.
-		The source parameter is unicast address of the remote
-		node-element that sent the message.
-		The remote parameter if true indicates that the device key
-		used to decrypt the message was from the sender. False
-		indicates that the local nodes device key was used, and the
-		message has permissions to modify local states.
-		The net_index parameter indicates what subnet the message was
-		received on, and if a response is required, the same subnet
-		must be used to send the response.
-		The data parameter is the incoming message.
 
+	addressed to the application, which was sent with the remote
+	node's device key.
+	The source parameter is unicast address of the remote
+	node-element that sent the message.
+	The remote parameter if true indicates that the device key
+	used to decrypt the message was from the sender. False
+	indicates that the local nodes device key was used, and the
+	message has permissions to modify local states.
+	The net_index parameter indicates what subnet the message was
+	received on, and if a response is required, the same subnet
+	must be used to send the response.
+	The data parameter is the incoming message.
 */
 func (a *Element1) DevKeyMessageReceived(source uint16, remote bool, net_index uint16, data []byte) error {
 	return a.client.Call("DevKeyMessageReceived", 0, source, remote, net_index, data).Store()
@@ -343,24 +293,24 @@ func (a *Element1) DevKeyMessageReceived(source uint16, remote bool, net_index u
 
 /*
 UpdateModelConfiguration 		This method is called by bluetooth-meshd daemon when a model's
-		configuration is updated.
-		The model_id parameter contains BT SIG Model Identifier or, if
-		Vendor key is present in config dictionary, a 16-bit
-		vendor-assigned Model Identifier.
-		The config parameter is a dictionary with the following keys
-		defined:
-		array{uint16} Bindings
-			Indices of application keys bound to the model
-		uint32 PublicationPeriod
-			Model publication period in milliseconds
-		uint16 Vendor
-			A 16-bit Bluetooth-assigned Company Identifier of the
-			vendor as defined by Bluetooth SIG
-		array{variant} Subscriptions
-			Addresses the model is subscribed to.
-			Each address is provided either as uint16 for group
-			addresses, or as array{byte} for virtual labels.
 
+	configuration is updated.
+	The model_id parameter contains BT SIG Model Identifier or, if
+	Vendor key is present in config dictionary, a 16-bit
+	vendor-assigned Model Identifier.
+	The config parameter is a dictionary with the following keys
+	defined:
+	array{uint16} Bindings
+		Indices of application keys bound to the model
+	uint32 PublicationPeriod
+		Model publication period in milliseconds
+	uint16 Vendor
+		A 16-bit Bluetooth-assigned Company Identifier of the
+		vendor as defined by Bluetooth SIG
+	array{variant} Subscriptions
+		Addresses the model is subscribed to.
+		Each address is provided either as uint16 for group
+		addresses, or as array{byte} for virtual labels.
 */
 func (a *Element1) UpdateModelConfiguration(model_id uint16, config map[string]interface{}) error {
 	return a.client.Call("UpdateModelConfiguration", 0, model_id, config).Store()

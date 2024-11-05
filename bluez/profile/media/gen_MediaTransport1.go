@@ -38,7 +38,6 @@ func NewMediaTransport1(objectPath dbus.ObjectPath) (*MediaTransport1, error) {
 
 /*
 MediaTransport1 MediaTransport1 hierarchy
-
 */
 type MediaTransport1 struct {
 	client                 *bluez.Client
@@ -108,12 +107,12 @@ type MediaTransport1Properties struct {
 	Volume uint16
 }
 
-//Lock access to properties
+// Lock access to properties
 func (p *MediaTransport1Properties) Lock() {
 	p.lock.Lock()
 }
 
-//Unlock access to properties
+// Unlock access to properties
 func (p *MediaTransport1Properties) Unlock() {
 	p.lock.Unlock()
 }
@@ -369,10 +368,10 @@ func (a *MediaTransport1) UnwatchProperties(ch chan *bluez.PropertyChanged) erro
 
 /*
 Acquire 			Acquire transport file descriptor and the MTU for read
-			and write respectively.
-			Possible Errors: org.bluez.Error.NotAuthorized
-					 org.bluez.Error.Failed
 
+	and write respectively.
+	Possible Errors: org.bluez.Error.NotAuthorized
+			 org.bluez.Error.Failed
 */
 func (a *MediaTransport1) Acquire() (dbus.UnixFD, uint16, uint16, error) {
 	var val0 dbus.UnixFD
@@ -384,14 +383,14 @@ func (a *MediaTransport1) Acquire() (dbus.UnixFD, uint16, uint16, error) {
 
 /*
 TryAcquire 			Acquire transport file descriptor only if the transport
-			is in "pending" state at the time the message is
-			received by BlueZ. Otherwise no request will be sent
-			to the remote device and the function will just fail
-			with org.bluez.Error.NotAvailable.
-			Possible Errors: org.bluez.Error.NotAuthorized
-					 org.bluez.Error.Failed
-					 org.bluez.Error.NotAvailable
 
+	is in "pending" state at the time the message is
+	received by BlueZ. Otherwise no request will be sent
+	to the remote device and the function will just fail
+	with org.bluez.Error.NotAvailable.
+	Possible Errors: org.bluez.Error.NotAuthorized
+			 org.bluez.Error.Failed
+			 org.bluez.Error.NotAvailable
 */
 func (a *MediaTransport1) TryAcquire() (dbus.UnixFD, uint16, uint16, error) {
 	var val0 dbus.UnixFD
@@ -403,7 +402,6 @@ func (a *MediaTransport1) TryAcquire() (dbus.UnixFD, uint16, uint16, error) {
 
 /*
 Release 			Releases file descriptor.
-
 */
 func (a *MediaTransport1) Release() error {
 	return a.client.Call("Release", 0).Store()

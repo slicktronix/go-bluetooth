@@ -41,7 +41,6 @@ GattCharacteristic1 Characteristic hierarchy
 
 For local GATT defined services, the object paths need to follow the service
 path hierarchy and are freely definable.
-
 */
 type GattCharacteristic1 struct {
 	client                 *bluez.Client
@@ -65,14 +64,7 @@ type GattCharacteristic1Properties struct {
 		Flags Defines how the characteristic value can be used. See
 				Core spec "Table 3.5: Characteristic Properties bit
 				field", and "Table 3.8: Characteristic Extended
-				Properties bit field".
-
-				The "x-notify" and "x-indicate" flags restrict access
-				to notifications and indications by imposing write
-				restrictions on a characteristic's client
-				characteristic configuration descriptor.
-
-				Allowed values:
+				Properties bit field". Allowed values:
 
 					"broadcast"
 					"read"
@@ -86,16 +78,10 @@ type GattCharacteristic1Properties struct {
 					"writable-auxiliaries"
 					"encrypt-read"
 					"encrypt-write"
-					"encrypt-notify" (Server only)
-					"encrypt-indicate" (Server only)
 					"encrypt-authenticated-read"
 					"encrypt-authenticated-write"
-					"encrypt-authenticated-notify" (Server only)
-					"encrypt-authenticated-indicate" (Server only)
 					"secure-read" (Server only)
 					"secure-write" (Server only)
-					"secure-notify" (Server only)
-					"secure-indicate" (Server only)
 					"authorize"
 	*/
 	Flags []string
@@ -108,13 +94,6 @@ type GattCharacteristic1Properties struct {
 				be set once registered.
 	*/
 	Handle uint16
-
-	/*
-		MTU Characteristic MTU, this is valid both for ReadValue
-				and WriteValue but either method can use long
-				procedures when supported.
-	*/
-	MTU uint16
 
 	/*
 		NotifyAcquired True, if this characteristic has been acquired by any
@@ -166,12 +145,12 @@ type GattCharacteristic1Properties struct {
 	WriteAcquired bool `dbus:"ignore"`
 }
 
-//Lock access to properties
+// Lock access to properties
 func (p *GattCharacteristic1Properties) Lock() {
 	p.lock.Lock()
 }
 
-//Unlock access to properties
+// Unlock access to properties
 func (p *GattCharacteristic1Properties) Unlock() {
 	p.lock.Unlock()
 }
@@ -207,15 +186,6 @@ func (a *GattCharacteristic1) SetHandle(v uint16) error {
 // GetHandle get Handle value
 func (a *GattCharacteristic1) GetHandle() (uint16, error) {
 	v, err := a.GetProperty("Handle")
-	if err != nil {
-		return uint16(0), err
-	}
-	return v.Value().(uint16), nil
-}
-
-// GetMTU get MTU value
-func (a *GattCharacteristic1) GetMTU() (uint16, error) {
-	v, err := a.GetProperty("MTU")
 	if err != nil {
 		return uint16(0), err
 	}
@@ -415,18 +385,18 @@ func (a *GattCharacteristic1) UnwatchProperties(ch chan *bluez.PropertyChanged) 
 
 /*
 ReadValue 			Issues a request to read the value of the
-			characteristic and returns the value if the
-			operation was successful.
-			Possible options: "offset": uint16 offset
-					  "mtu": Exchanged MTU (Server only)
-					  "device": Object Device (Server only)
-			Possible Errors: org.bluez.Error.Failed
-					 org.bluez.Error.InProgress
-					 org.bluez.Error.NotPermitted
-					 org.bluez.Error.NotAuthorized
-					 org.bluez.Error.InvalidOffset
-					 org.bluez.Error.NotSupported
 
+	characteristic and returns the value if the
+	operation was successful.
+	Possible options: "offset": uint16 offset
+			  "mtu": Exchanged MTU (Server only)
+			  "device": Object Device (Server only)
+	Possible Errors: org.bluez.Error.Failed
+			 org.bluez.Error.InProgress
+			 org.bluez.Error.NotPermitted
+			 org.bluez.Error.NotAuthorized
+			 org.bluez.Error.InvalidOffset
+			 org.bluez.Error.NotSupported
 */
 func (a *GattCharacteristic1) ReadValue(options map[string]interface{}) ([]byte, error) {
 	val0 := []byte{}
@@ -436,27 +406,27 @@ func (a *GattCharacteristic1) ReadValue(options map[string]interface{}) ([]byte,
 
 /*
 WriteValue 			Issues a request to write the value of the
-			characteristic.
-			Possible options: "offset": Start offset
-					  "type": string
-						Possible values:
-						"command": Write without
-						response
-						"request": Write with response
-						"reliable": Reliable Write
-					  "mtu": Exchanged MTU (Server only)
-					  "device": Device path (Server only)
-					  "link": Link type (Server only)
-					  "prepare-authorize": True if prepare
-							       authorization
-							       request
-			Possible Errors: org.bluez.Error.Failed
-					 org.bluez.Error.InProgress
-					 org.bluez.Error.NotPermitted
-					 org.bluez.Error.InvalidValueLength
-					 org.bluez.Error.NotAuthorized
-					 org.bluez.Error.NotSupported
 
+	characteristic.
+	Possible options: "offset": Start offset
+			  "type": string
+				Possible values:
+				"command": Write without
+				response
+				"request": Write with response
+				"reliable": Reliable Write
+			  "mtu": Exchanged MTU (Server only)
+			  "device": Device path (Server only)
+			  "link": Link type (Server only)
+			  "prepare-authorize": True if prepare
+					       authorization
+					       request
+	Possible Errors: org.bluez.Error.Failed
+			 org.bluez.Error.InProgress
+			 org.bluez.Error.NotPermitted
+			 org.bluez.Error.InvalidValueLength
+			 org.bluez.Error.NotAuthorized
+			 org.bluez.Error.NotSupported
 */
 func (a *GattCharacteristic1) WriteValue(value []byte, options map[string]interface{}) error {
 	return a.client.Call("WriteValue", 0, value, options).Store()
@@ -464,27 +434,27 @@ func (a *GattCharacteristic1) WriteValue(value []byte, options map[string]interf
 
 /*
 AcquireWrite 			Acquire file descriptor and MTU for writing. Only
-			sockets are supported. Usage of WriteValue will be
-			locked causing it to return NotPermitted error.
-			For server the MTU returned shall be equal or smaller
-			than the negotiated MTU.
-			For client it only works with characteristic that has
-			WriteAcquired property which relies on
-			write-without-response Flag.
-			To release the lock the client shall close the file
-			descriptor, a HUP is generated in case the device
-			is disconnected.
-			Note: the MTU can only be negotiated once and is
-			symmetric therefore this method may be delayed in
-			order to have the exchange MTU completed, because of
-			that the file descriptor is closed during
-			reconnections as the MTU has to be renegotiated.
-			Possible options: "device": Object Device (Server only)
-					  "mtu": Exchanged MTU (Server only)
-					  "link": Link type (Server only)
-			Possible Errors: org.bluez.Error.Failed
-					 org.bluez.Error.NotSupported
 
+	sockets are supported. Usage of WriteValue will be
+	locked causing it to return NotPermitted error.
+	For server the MTU returned shall be equal or smaller
+	than the negotiated MTU.
+	For client it only works with characteristic that has
+	WriteAcquired property which relies on
+	write-without-response Flag.
+	To release the lock the client shall close the file
+	descriptor, a HUP is generated in case the device
+	is disconnected.
+	Note: the MTU can only be negotiated once and is
+	symmetric therefore this method may be delayed in
+	order to have the exchange MTU completed, because of
+	that the file descriptor is closed during
+	reconnections as the MTU has to be renegotiated.
+	Possible options: "device": Object Device (Server only)
+			  "mtu": Exchanged MTU (Server only)
+			  "link": Link type (Server only)
+	Possible Errors: org.bluez.Error.Failed
+			 org.bluez.Error.NotSupported
 */
 func (a *GattCharacteristic1) AcquireWrite(options map[string]interface{}) (dbus.UnixFD, uint16, error) {
 	var val0 dbus.UnixFD
@@ -495,32 +465,32 @@ func (a *GattCharacteristic1) AcquireWrite(options map[string]interface{}) (dbus
 
 /*
 AcquireNotify 			Acquire file descriptor and MTU for notify. Only
-			sockets are support. Usage of StartNotify will be locked
-			causing it to return NotPermitted error.
-			For server the MTU returned shall be equal or smaller
-			than the negotiated MTU.
-			Only works with characteristic that has NotifyAcquired
-			which relies on notify Flag and no other client have
-			called StartNotify.
-			Notification are enabled during this procedure so
-			StartNotify shall not be called, any notification
-			will be dispatched via file descriptor therefore the
-			Value property is not affected during the time where
-			notify has been acquired.
-			To release the lock the client shall close the file
-			descriptor, a HUP is generated in case the device
-			is disconnected.
-			Note: the MTU can only be negotiated once and is
-			symmetric therefore this method may be delayed in
-			order to have the exchange MTU completed, because of
-			that the file descriptor is closed during
-			reconnections as the MTU has to be renegotiated.
-			Possible options: "device": Object Device (Server only)
-					  "mtu": Exchanged MTU (Server only)
-					  "link": Link type (Server only)
-			Possible Errors: org.bluez.Error.Failed
-					 org.bluez.Error.NotSupported
 
+	sockets are support. Usage of StartNotify will be locked
+	causing it to return NotPermitted error.
+	For server the MTU returned shall be equal or smaller
+	than the negotiated MTU.
+	Only works with characteristic that has NotifyAcquired
+	which relies on notify Flag and no other client have
+	called StartNotify.
+	Notification are enabled during this procedure so
+	StartNotify shall not be called, any notification
+	will be dispatched via file descriptor therefore the
+	Value property is not affected during the time where
+	notify has been acquired.
+	To release the lock the client shall close the file
+	descriptor, a HUP is generated in case the device
+	is disconnected.
+	Note: the MTU can only be negotiated once and is
+	symmetric therefore this method may be delayed in
+	order to have the exchange MTU completed, because of
+	that the file descriptor is closed during
+	reconnections as the MTU has to be renegotiated.
+	Possible options: "device": Object Device (Server only)
+			  "mtu": Exchanged MTU (Server only)
+			  "link": Link type (Server only)
+	Possible Errors: org.bluez.Error.Failed
+			 org.bluez.Error.NotSupported
 */
 func (a *GattCharacteristic1) AcquireNotify(options map[string]interface{}) (dbus.UnixFD, uint16, error) {
 	var val0 dbus.UnixFD
@@ -531,13 +501,12 @@ func (a *GattCharacteristic1) AcquireNotify(options map[string]interface{}) (dbu
 
 /*
 StartNotify 			Starts a notification session from this characteristic
-			if it supports value notifications or indications.
-			Possible Errors: org.bluez.Error.Failed
-					 org.bluez.Error.NotPermitted
-					 org.bluez.Error.InProgress
-					 org.bluez.Error.NotConnected
-					 org.bluez.Error.NotSupported
 
+	if it supports value notifications or indications.
+	Possible Errors: org.bluez.Error.Failed
+			 org.bluez.Error.NotPermitted
+			 org.bluez.Error.InProgress
+			 org.bluez.Error.NotSupported
 */
 func (a *GattCharacteristic1) StartNotify() error {
 	return a.client.Call("StartNotify", 0).Store()
@@ -545,11 +514,11 @@ func (a *GattCharacteristic1) StartNotify() error {
 
 /*
 StopNotify 			This method will cancel any previous StartNotify
-			transaction. Note that notifications from a
-			characteristic are shared between sessions thus
-			calling StopNotify will release a single session.
-			Possible Errors: org.bluez.Error.Failed
 
+	transaction. Note that notifications from a
+	characteristic are shared between sessions thus
+	calling StopNotify will release a single session.
+	Possible Errors: org.bluez.Error.Failed
 */
 func (a *GattCharacteristic1) StopNotify() error {
 	return a.client.Call("StopNotify", 0).Store()
@@ -557,9 +526,9 @@ func (a *GattCharacteristic1) StopNotify() error {
 
 /*
 Confirm 			This method doesn't expect a reply so it is just a
-			confirmation that value was received.
-			Possible Errors: org.bluez.Error.Failed
 
+	confirmation that value was received.
+	Possible Errors: org.bluez.Error.Failed
 */
 func (a *GattCharacteristic1) Confirm() error {
 	return a.client.Call("Confirm", 0).Store()
